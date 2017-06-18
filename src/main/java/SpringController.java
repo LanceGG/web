@@ -1,10 +1,13 @@
 /**
  * Created by Lance on 2017/4/12.
  */
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
+import com.user.domain.User;
+import com.user.service.UserService;
 
 //表明这是一个 Controller
 @Controller
@@ -17,12 +20,15 @@ import org.springframework.web.bind.annotation.*;
 
 public class SpringController {
 
+    @Autowired
+    private UserService userService;
+
     //设置访问的url
     @RequestMapping("/")
     //表示返回JSON格式的结果，如果前面使用的是@RestController可以不用写
     @ResponseBody
-    String home() {
-        return "Hello World!";//返回结果为字符串
+    User home() {
+        return userService.findById(1);//返回结果为字符串
     }
 
     public static void main(String[] args) throws Exception {
