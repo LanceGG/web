@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @SpringBootApplication
 @Component
-@ComponentScan(basePackages = {"com.example.demo.dao.mapper"})
+@ComponentScan(basePackages = {"com.example.demo"})
 public class DemoApplication {
 
 	public static void main(String[] args) {

@@ -1,9 +1,13 @@
 package com.example.demo.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by Lance on 2017/6/20.
  */
-public class User {
+public class User implements Serializable{
+
+    private static final long serialVersionUID = -48061577457645829L;
 
     private Integer id;
 

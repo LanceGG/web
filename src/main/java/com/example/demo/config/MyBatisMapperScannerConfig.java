@@ -16,7 +16,7 @@ public class MyBatisMapperScannerConfig {
     public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
         mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
-        mapperScannerConfigurer.setBasePackage("com.example.demo.dao");
+        mapperScannerConfigurer.setBasePackage("com.example.demo");
         return mapperScannerConfigurer;
     }
 }
