@@ -1,72 +1,99 @@
 package com.example.demo.config;
 
-import org.apache.ibatis.plugin.Interceptor;
+import java.io.IOException;
+
+import javax.sql.DataSource;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
-import javax.sql.DataSource;
-import java.util.Properties;
-
-/**
- * Created by Lance on 2017/6/20.
- */
 @Configuration
 @EnableTransactionManagement
 public class MybatisConfig implements TransactionManagementConfigurer{
 
-    @Autowired
-    DataSource dataSource;
+    private static Log logger = LogFactory.getLog(MybatisConfig.class);
 
+    //  配置类型别名
+    @Value("${mybatis.typeAliasesPackage}")
+    private String typeAliasesPackage;
+
+    //  配置mapper的扫描，找到所有的mapper.xml映射文件
+    @Value("${mybatis.mapperLocations}")
+    private String mapperLocations;
+
+    //  加载全局的配置文件
+    @Value("${mybatis.configLocation}")
+    private String configLocation;
+
+    @Autowired
+    private DataSource dataSource;
+    // DataSource配置
+    //  @Bean
+    //  @ConfigurationProperties(prefix = "spring.datasource")
+    //  public DruidDataSource dataSource() {
+    //      return new com.alibaba.druid.pool.DruidDataSource();
+    //  }
+
+    // 提供SqlSeesion
     @Bean(name = "sqlSessionFactory")
     public SqlSessionFactory sqlSessionFactoryBean() {
-        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-
-        bean.setDataSource(dataSource);
-
-//        // 分页插件
-//        PageInterceptor interceptor = new PageInterceptor();
-//        Properties properties = new Properties();
-//        properties.setProperty("reasonable", "true");
-//        properties.setProperty("supportMethodsArguments", "true");
-//        properties.setProperty("returnPageInfo", "check");
-//        properties.setProperty("params", "count=countSql");
-//        properties.setProperty("helperDialect", "postgresql");
-//        interceptor.setProperties(properties);
-//
-//        bean.setTypeHandlersPackage("com.lianfan.extend.mybatis.handler");
-//
-//        // 添加插件
-//        bean.setPlugins(new Interceptor[] { interceptor });
-
-        // 添加XML目录
-        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
-            bean.setMapperLocations(resolver.getResources("classpath:/mapping/*.xml"));
-            return bean.getObject();
+            SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
+            sessionFactoryBean.setDataSource(dataSource);
+
+            // 读取配置
+            sessionFactoryBean.setTypeAliasesPackage(typeAliasesPackage);
+
+            //
+            Resource[] resources = new PathMatchingResourcePatternResolver()
+                    .getResources(mapperLocations);
+            sessionFactoryBean.setMapperLocations(resources);
+            //会报java.lang.NullPointerException,不知道为啥
+//            sessionFactoryBean.setConfigLocation(
+//                    new DefaultResourceLoader().getResource(configLocation));
+
+            //添加插件  （改为使用配置文件加载了）
+            //          sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageHelper()});
+
+            return sessionFactoryBean.getObject();
+        } catch (IOException e) {
+            logger.warn("mybatis resolver mapper*xml is error");
+            return null;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            logger.warn("mybatis sqlSessionFactoryBean create error");
+            return null;
         }
     }
 
-    @Bean
-    public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
-        return new SqlSessionTemplate(sqlSessionFactory);
-    }
+
+    //  @Bean
+    //    public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
+    //        return new SqlSessionTemplate(sqlSessionFactory);
+    //    }
+
+    //  @Bean
+    //  public PlatformTransactionManager transactionManager(){
+    //      return new DataSourceTransactionManager(dataSource);
+    //  }
+
 
     @Bean
-    @Override
     public PlatformTransactionManager annotationDrivenTransactionManager() {
         return new DataSourceTransactionManager(dataSource);
     }
+
+
 }
