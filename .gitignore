@@ -1,4 +1,5 @@
 .gradle
+.idea
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 
@@ -11,7 +12,6 @@
 .springBeans
 
 ### IntelliJ IDEA ###
-.idea
 *.iws
 *.iml
 *.ipr
@@ -20,6 +20,9 @@
 nbproject/private/
 build/
 nbbuild/
+gradle
 dist/
 nbdist/
 .nb-gradle/
+/gradlew
+/gradlew.bat
