@@ -8,4 +8,6 @@ import com.example.demo.domain.User;
 public interface UserService {
 
     User getById(Integer id);
+
+    void insert(User user);
 }
