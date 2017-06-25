@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 /**
@@ -16,6 +17,9 @@ public class User implements Serializable{
     private String userName;
 
     private String password;
+
+    @Min(value = 18,message = "未成年")
+    private Integer age;
 
     public Integer getId() {
         return id;
@@ -47,5 +51,13 @@ public class User implements Serializable{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 }

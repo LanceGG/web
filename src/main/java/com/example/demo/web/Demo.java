@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
+
 /**
  * Created by Lance on 2017/6/20.
  */
@@ -44,8 +46,7 @@ public class Demo {
 
     @RequestMapping(value = "/insert")
     public @ResponseBody
-    void insert() {
-        User user = new User();
+    void insert(@Valid User user) {
         userService.insert(user);
     }
 }

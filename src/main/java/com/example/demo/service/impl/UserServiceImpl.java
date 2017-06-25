@@ -24,14 +24,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void insert(User user) {
-        user.setName("test");
-        user.setUserName("123");
-        user.setPassword("123456");
-        userDao.insert(user);
 
-        User user1 = new User();
-        user1.setName("test");
-        user1.setPassword("123456");
-        userDao.insert(user1);
+        userDao.insert(user);
     }
 }

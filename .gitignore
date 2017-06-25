@@ -18,6 +18,8 @@
 
 ### NetBeans ###
 nbproject/private/
+.idea/
+.gradle/
 build/
 nbbuild/
 gradle
