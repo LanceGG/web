@@ -6,6 +6,7 @@ import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,10 +27,10 @@ public class Demo {
     @Autowired
     private UserDao userDao;
 
-    @RequestMapping(value = "/cc")
+    @RequestMapping(value = "/cc/{id}")
     public @ResponseBody
-    User Demo() {
-        return userService.getById(1);
+    User Demo(@PathVariable("id") Integer id) {
+        return userService.getById(id);
     }
 
     @RequestMapping(value = "/dd")
