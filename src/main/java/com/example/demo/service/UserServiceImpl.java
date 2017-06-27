@@ -1,7 +1,8 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import com.example.demo.dao.UserDao;
 import com.example.demo.domain.User;
+import com.example.demo.exception.BasicException;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void insert(User user) {
+    public void insert(User user) throws Exception{
+        if (user.getAge()<10) {
+            throw new BasicException(100,"测试");
+        }
 
         userDao.insert(user);
     }

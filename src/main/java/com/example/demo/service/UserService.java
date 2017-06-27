@@ -9,5 +9,5 @@ public interface UserService {
 
     User getById(Integer id);
 
-    void insert(User user);
+    void insert(User user) throws Exception;
 }
